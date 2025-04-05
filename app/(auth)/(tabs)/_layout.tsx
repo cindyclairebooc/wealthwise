@@ -20,6 +20,18 @@ export default function AuthLayout() {
         name="dashboard"
         options={{ headerShown: false }}
       />
+      <Tabs.Screen
+        name="todo"
+        options={{ headerShown: false }}
+      />
+      <Tabs.Screen
+        name="transactions"
+        options={{ headerShown: false }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{ headerShown: false }}
+      />
     </Tabs>
   );
 }
