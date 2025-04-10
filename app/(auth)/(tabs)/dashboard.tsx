@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, Modal, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather'; // Feather icons
-import FontAwesome from 'react-native-vector-icons/FontAwesome'; // For the eye icon
-import { Picker } from '@react-native-picker/picker'; // Import the Picker component
-import { Menu, Provider } from 'react-native-paper'; // Import the Menu and Provider components
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Picker } from '@react-native-picker/picker';
+import { Menu, Provider } from 'react-native-paper';
 
 function Dashboard() {
   const user = {
@@ -21,67 +21,45 @@ function Dashboard() {
       subCategory: 'Breakfast',
       amount: 63,
       type: 'expense',
-      icon: <FontAwesome name="cutlery" size={20} color="#fff" />,
+      iconName: 'cutlery',
       iconBgColor: '#81C784',
-      date: 'Oct 2024'
+      date: 'Oct 2024',
     },
     {
       id: '2',
       category: 'Transportation',
       amount: 100,
       type: 'expense',
-      icon: <FontAwesome name="car" size={20} color="#fff" />,
+      iconName: 'car',
       iconBgColor: '#FFB300',
-      date: 'Oct 2024'
-    }
+      date: 'Oct 2024',
+    },
   ];
 
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
   const [isAddBalanceVisible, setIsAddBalanceVisible] = useState(false);
-  const [isEditBalanceVisible, setIsEditBalanceVisible] = useState(false); // Edit modal state
+  const [isEditBalanceVisible, setIsEditBalanceVisible] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('gcash');
-  const [editAmount, setEditAmount] = useState(''); // Store the amount for editing
+  const [editAmount, setEditAmount] = useState('');
   const [cashBalanceMenuVisible, setCashBalanceMenuVisible] = useState(false);
-  const [isCashBalanceVisible, setIsCashBalanceVisible] = useState(true); // State to hide the whole card
+  const [isCashBalanceVisible, setIsCashBalanceVisible] = useState(true);
 
-  const toggleBalanceVisibility = () => {
-    setIsBalanceVisible(!isBalanceVisible);
-  };
-
-  const toggleAddBalanceModal = () => {
-    setIsAddBalanceVisible(!isAddBalanceVisible);
-    setSelectedPaymentMethod('gcash');
-    setEditAmount('');
-  };
-
-  const toggleEditBalanceModal = () => {
-    setIsEditBalanceVisible(!isEditBalanceVisible);
-  };
-
-  const openCashBalanceMenu = () => {
-    setCashBalanceMenuVisible(true);
-  };
-
-  const closeCashBalanceMenu = () => {
-    setCashBalanceMenuVisible(false);
-  };
+  const toggleBalanceVisibility = () => setIsBalanceVisible(!isBalanceVisible);
+  const toggleEditBalanceModal = () => setIsEditBalanceVisible(!isEditBalanceVisible);
+  const openCashBalanceMenu = () => setCashBalanceMenuVisible(true);
+  const closeCashBalanceMenu = () => setCashBalanceMenuVisible(false);
 
   const handleHideBalance = () => {
-    setIsBalanceVisible(false); // Hide the balance
-    setIsCashBalanceVisible(false); // Hide the whole card
+    setIsBalanceVisible(false);
+    setIsCashBalanceVisible(false);
     closeCashBalanceMenu();
   };
 
   const handleEditBalance = () => {
-    setEditAmount(user.balance.toString()); // Pre-fill the amount
-    setSelectedPaymentMethod('gcash'); // Pre-fill with the payment method (can be dynamic)
+    setEditAmount(user.balance.toString());
+    setSelectedPaymentMethod('gcash');
     toggleEditBalanceModal();
     closeCashBalanceMenu();
-  };
-
-  const handleDeleteBalance = () => {
-    closeCashBalanceMenu();
-    // Implement your delete logic here
   };
 
   const handleSaveBalance = () => {
@@ -95,7 +73,6 @@ function Dashboard() {
       <ImageBackground source={require("../../../assets/images/cover.png")} style={{ flex: 1 }}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Conditionally render the Cash Balance Card */}
           {isCashBalanceVisible && (
             <View style={styles.cashBalanceCard}>
               <View style={styles.cashBalanceCardTop}>
@@ -113,29 +90,12 @@ function Dashboard() {
                   }
                   style={styles.cashBalanceMenu}
                 >
-                  <Menu.Item
-                    onPress={handleHideBalance}
-                    title="Hide"
-                    leadingIcon={() => <Icon name="eye-off" size={20} color="#757575" />}
-                    // style={styles.menuItem}
-                    // titleStyle={styles.menuItemTitle}
-                  />
-                  <Menu.Item
-                    onPress={handleEditBalance}
-                    title="Edit"
-                    leadingIcon={() => <Icon name="edit" size={20} color="#757575" />}
-                    // style={styles.menuItem}
-                    // titleStyle={styles.menuItemTitle}
-                  />
-                  <Menu.Item
-                    onPress={handleDeleteBalance}
-                    title="Delete"
-                    leadingIcon={() => <Icon name="trash-2" size={20} color="#757575" />}
-                    // style={styles.menuItem}
-                    // titleStyle={styles.menuItemTitle}
-                  />
+                  <Menu.Item onPress={handleHideBalance} title="Hide" leadingIcon={() => <Icon name="eye-off" size={20} color="#757575" />} />
+                  <Menu.Item onPress={handleEditBalance} title="Edit" leadingIcon={() => <Icon name="edit" size={20} color="#757575" />} />
+                  <Menu.Item onPress={closeCashBalanceMenu} title="Delete" leadingIcon={() => <Icon name="trash-2" size={20} color="#757575" />} />
                 </Menu>
               </View>
+
               <View style={styles.cashBalanceBottom}>
                 <Text style={styles.cashBalanceAvailable}>Available:</Text>
                 <View style={styles.cashBalanceAmountRow}>
@@ -143,32 +103,27 @@ function Dashboard() {
                     {isBalanceVisible ? `₱${user.balance.toLocaleString()}` : '₱********'}
                   </Text>
                   <TouchableOpacity onPress={toggleBalanceVisibility}>
-                    <FontAwesome
-                      name={isBalanceVisible ? 'eye' : 'eye-slash'}
-                      size={20}
-                      color="#2551A3"
-                    />
+                    <FontAwesome name={isBalanceVisible ? 'eye' : 'eye-slash'} size={20} color="#2551A3" />
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
           )}
 
-          {/* Add Balance Shortcut */}
-          <TouchableOpacity style={styles.addBalanceCard} onPress={toggleAddBalanceModal}>
+          <TouchableOpacity style={styles.addBalanceCard} onPress={() => setIsAddBalanceVisible(true)}>
             <Text style={styles.addBalanceText}>Add Balance</Text>
           </TouchableOpacity>
 
-          {/* Recent Balances */}
           <View style={styles.recentRecordsContainer}>
             <View style={styles.recentRecordsBackground}>
               <Text style={styles.recentHeader}>Recent Records</Text>
-              <Text style={styles.recentSubHeader}>October Transactions</Text>
+              <Text style={styles.recentSubHeader}>October Balances</Text>
+
               {recentBalances.map(balance => (
                 <View key={balance.id} style={styles.balanceCard}>
                   <View style={styles.balanceInfo}>
                     <View style={[styles.iconCircle, { backgroundColor: balance.iconBgColor }]}>
-                      {balance.icon}
+                      <FontAwesome name={balance.iconName} size={20} color="#fff" />
                     </View>
                     <View>
                       <Text style={styles.category}>{balance.category}</Text>
@@ -177,8 +132,7 @@ function Dashboard() {
                   </View>
                   <View style={styles.amountInfo}>
                     <Text style={[styles.amount, { color: balance.type === 'expense' ? '#E53935' : '#43A047' }]}>
-                      {balance.type === 'expense' ? '▼' : '▲'}
-                      {isBalanceVisible ? `₱${balance.amount}` : '₱**'}
+                      {balance.type === 'expense' ? '▼' : '▲'}{isBalanceVisible ? `₱${balance.amount}` : '₱**'}
                     </Text>
                     <Text style={styles.date}>{balance.date}</Text>
                   </View>
@@ -186,60 +140,87 @@ function Dashboard() {
               ))}
             </View>
           </View>
+        </ScrollView>
 
-          {/* Edit Balance Modal */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isEditBalanceVisible}
-            onRequestClose={toggleEditBalanceModal}
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Edit Balance</Text>
-
-                {/* Payment Method Dropdown */}
-                <View style={styles.modalInputContainer}>
-                  <Text style={styles.modalLabel}>Cash Balance:</Text>
-                  <View>
-                    <Picker
-                      selectedValue={selectedPaymentMethod}
-                      onValueChange={(itemValue) => setSelectedPaymentMethod(itemValue)}
-                      // style={styles.picker}
-                    >
-                      <Picker.Item label="GCash" value="gcash" />
-                      <Picker.Item label="Credit Card" value="credit_card" />
-                      <Picker.Item label="Debit Card" value="debit_card" />
-                      <Picker.Item label="Others" value="others" />
-                    </Picker>
-                  </View>
-                </View>
-
-                {/* Amount Input */}
-                <View style={styles.modalInputContainer}>
-                  <Text style={styles.modalLabel}>Amount:</Text>
-                  <TextInput
-                    style={styles.modalTextInput}
-                    placeholder="Enter amount"
-                    keyboardType="numeric"
-                    value={editAmount}
-                    onChangeText={setEditAmount}
-                  />
-                </View>
-
-                {/* Save and Cancel Buttons */}
-                <View style={styles.modalButtonsContainer}>
-                  <TouchableOpacity style={styles.modalSaveButton} onPress={handleSaveBalance}>
-                    <Text style={styles.modalSaveButtonText}>Save</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.modalCancelButton} onPress={toggleEditBalanceModal}>
-                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
+        {/* Edit Balance Modal */}
+        <Modal animationType="slide" transparent={true} visible={isEditBalanceVisible} onRequestClose={toggleEditBalanceModal}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Edit Balance</Text>
+              <View style={styles.modalInputContainer}>
+                <Text style={styles.modalLabel}>Cash Balance:</Text>
+                <View style={styles.pickerContainer}>
+                  <Picker selectedValue={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod} style={styles.picker}>
+                    <Picker.Item label="GCash" value="gcash" />
+                    <Picker.Item label="Credit Card" value="credit_card" />
+                    <Picker.Item label="Debit Card" value="debit_card" />
+                    <Picker.Item label="Others" value="others" />
+                  </Picker>
                 </View>
               </View>
+              <View style={styles.modalInputContainer}>
+                <Text style={styles.modalLabel}>Amount:</Text>
+                <TextInput
+                  style={styles.modalTextInput}
+                  placeholder="Enter amount"
+                  keyboardType="numeric"
+                  value={editAmount}
+                  onChangeText={setEditAmount}
+                />
+              </View>
+              <View style={styles.modalButtonsContainer}>
+                <TouchableOpacity style={styles.modalSaveButton} onPress={handleSaveBalance}>
+                  <Text style={styles.modalSaveButtonText}>Save</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.modalCancelButton} onPress={toggleEditBalanceModal}>
+                  <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </Modal>
-        </ScrollView>
+          </View>
+        </Modal>
+
+        {/* Add Balance Modal */}
+        <Modal animationType="slide" transparent={true} visible={isAddBalanceVisible} onRequestClose={() => setIsAddBalanceVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Add Balance</Text>
+              <View style={styles.modalInputContainer}>
+                <Text style={styles.modalLabel}>Cash Balance:</Text>
+                <View style={styles.pickerContainer}>
+                  <Picker selectedValue={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod} style={styles.picker}>
+                    <Picker.Item label="GCash" value="gcash" />
+                    <Picker.Item label="Credit Card" value="credit_card" />
+                    <Picker.Item label="PayMaya" value="paymaya" />
+                    <Picker.Item label="Others" value="others" />
+                  </Picker>
+                </View>
+              </View>
+              <View style={styles.modalInputContainer}>
+                <Text style={styles.modalLabel}>Amount:</Text>
+                <TextInput
+                  style={styles.modalTextInput}
+                  placeholder="Enter amount"
+                  keyboardType="numeric"
+                  value={editAmount}
+                  onChangeText={setEditAmount}
+                />
+              </View>
+              <View style={styles.modalButtonsContainer}>
+                <TouchableOpacity style={styles.modalSaveButton} onPress={() => {
+                  console.log('Added via:', selectedPaymentMethod);
+                  console.log('Amount:', editAmount);
+                  setIsAddBalanceVisible(false);
+                }}>
+                  <Text style={styles.modalSaveButtonText}>Save</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.modalCancelButton} onPress={() => setIsAddBalanceVisible(false)}>
+                  <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
       </ImageBackground>
     </Provider>
