@@ -28,7 +28,7 @@ const Reminders: React.FC<RemindersProps> = ({ reminders, onComplete, onEdit, on
           <Icon name="plus" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      {reminders.map((reminder, index) => (
+      {reminders?.map((reminder, index) => (
         <View key={index} style={styles.reminderItem}>
           <View style={styles.reminderInfo}>
             <Text style={styles.reminderTitle}>{reminder.title}</Text>

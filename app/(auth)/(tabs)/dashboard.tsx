@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Platform, Modal, TextInput } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, Modal, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'; // Feather icons
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; // For the eye icon
 import { Picker } from '@react-native-picker/picker'; // Import the Picker component
@@ -92,6 +92,7 @@ function Dashboard() {
 
   return (
     <Provider>
+      <ImageBackground source={require("../../../assets/images/cover.png")} style={{ flex: 1 }}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Conditionally render the Cash Balance Card */}
@@ -116,22 +117,22 @@ function Dashboard() {
                     onPress={handleHideBalance}
                     title="Hide"
                     leadingIcon={() => <Icon name="eye-off" size={20} color="#757575" />}
-                    style={styles.menuItem}
-                    titleStyle={styles.menuItemTitle}
+                    // style={styles.menuItem}
+                    // titleStyle={styles.menuItemTitle}
                   />
                   <Menu.Item
                     onPress={handleEditBalance}
                     title="Edit"
                     leadingIcon={() => <Icon name="edit" size={20} color="#757575" />}
-                    style={styles.menuItem}
-                    titleStyle={styles.menuItemTitle}
+                    // style={styles.menuItem}
+                    // titleStyle={styles.menuItemTitle}
                   />
                   <Menu.Item
                     onPress={handleDeleteBalance}
                     title="Delete"
                     leadingIcon={() => <Icon name="trash-2" size={20} color="#757575" />}
-                    style={styles.menuItem}
-                    titleStyle={styles.menuItemTitle}
+                    // style={styles.menuItem}
+                    // titleStyle={styles.menuItemTitle}
                   />
                 </Menu>
               </View>
@@ -162,7 +163,7 @@ function Dashboard() {
           <View style={styles.recentRecordsContainer}>
             <View style={styles.recentRecordsBackground}>
               <Text style={styles.recentHeader}>Recent Records</Text>
-              <Text style={styles.recentSubHeader}>October Balances</Text>
+              <Text style={styles.recentSubHeader}>October Transactions</Text>
               {recentBalances.map(balance => (
                 <View key={balance.id} style={styles.balanceCard}>
                   <View style={styles.balanceInfo}>
@@ -200,11 +201,11 @@ function Dashboard() {
                 {/* Payment Method Dropdown */}
                 <View style={styles.modalInputContainer}>
                   <Text style={styles.modalLabel}>Cash Balance:</Text>
-                  <View style={styles.pickerContainer}>
+                  <View>
                     <Picker
                       selectedValue={selectedPaymentMethod}
                       onValueChange={(itemValue) => setSelectedPaymentMethod(itemValue)}
-                      style={styles.picker}
+                      // style={styles.picker}
                     >
                       <Picker.Item label="GCash" value="gcash" />
                       <Picker.Item label="Credit Card" value="credit_card" />
@@ -240,6 +241,7 @@ function Dashboard() {
           </Modal>
         </ScrollView>
       </View>
+      </ImageBackground>
     </Provider>
   );
 }
@@ -247,7 +249,6 @@ function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E3F2FD',
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -326,11 +327,12 @@ const styles = StyleSheet.create({
   },
   recentRecordsContainer: {
     marginTop: 24,
-    paddingHorizontal: 8,
   },
   recentRecordsBackground: {
     backgroundColor: '#fff',
-    borderRadius: 15,
+    borderRadius: 30,
+    height: "80%",
+    width: "100%",
     padding: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
