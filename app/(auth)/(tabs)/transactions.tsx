@@ -1,80 +1,177 @@
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, ImageBackground } from 'react-native'
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Feather';
+
+interface TransactionItemProps {
+  time: string;
+  title: string;
+  category: string;
+  amount: string;
+  iconColor: string;
+  iconName: 'caret-up' | 'caret-down';
+}
+
+const TransactionItem: React.FC<TransactionItemProps> = ({time, title, category, amount, iconColor, iconName}) => (
+  <View style={styles.transactionContainer}>
+    <View style={styles.transactionContent}>
+      <View style={styles.transactionTextContainer}>
+        <Text style={styles.transactionTime}>{time}</Text>
+        <Text style={styles.transactionTitle}>{title}</Text>
+        <Text style={styles.transactionCategory}>{category}</Text>
+      </View>
+
+      <View style={styles.transactionDetails}>
+        <FontAwesome name={iconName} size={30} color={iconColor} style={styles.icon} />
+        <Text style={[styles.expensesAmountText, { color: iconColor }]}>{amount}</Text>
+      </View>
+    </View>
+  </View>
+);
 
 export default function Transactions() {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const categories = ['All', 'Income', 'Expenses'];
+
+  // EXAMPLE DUMMY DATA
+  const transactions = [
+    {
+      time: '10:02 PM',
+      title: 'Grocery Shopping',
+      category: 'Food',
+      amount: '₱1300.00',
+      iconColor: 'red',
+      iconName: 'caret-down',
+      date: 'April 01, 2025', 
+    },
+    {
+      time: '08:15 AM',
+      title: 'Taxi Fare',
+      category: 'Transportation',
+      amount: '₱120.00',
+      iconColor: 'red',
+      iconName: 'caret-down',
+      date: 'April 01, 2025', 
+    },
+    {
+      time: '7:52 AM',
+      title: 'Salary',
+      category: 'Income',
+      amount: '₱2000.00',
+      iconColor: 'green',
+      iconName: 'caret-up',
+      date: 'April 01, 2025',  
+    },
+    {
+      time: '07:30 AM',
+      title: 'Breakfast',
+      category: 'Meal',
+      amount: '₱63.00',
+      iconColor: 'red',
+      iconName: 'caret-down',
+      date: 'March 31, 2025', 
+    },  
+  ];
+
   return (
     <ImageBackground source={require("../../../assets/images/cover.png")} style={{ flex: 1 }}>
-    <View style={styles.page}>
-      <Text style={styles.transacText}>Transactions</Text>
+      <View style={styles.page}>
+        <View style={styles.header}>
+            <Text style={styles.transacText}>Transactions</Text>
+            <TouchableOpacity style={styles.addButton}>
+              <Icon name="plus" size={20} color="white" />
+            </TouchableOpacity>
+      </View>
+        <Text style={styles.totalBalance}>₱3517.00</Text>
 
-      <Text style={styles.totalBalance}>₱500.00</Text>
-
-      <View style={styles.incomeExpensesAmount}> 
+        <View style={styles.incomeExpensesAmount}>
           <View style={styles.incomeAmount}>
             <View style={styles.row}>
               <FontAwesome name="caret-up" size={30} color="green" style={styles.icon} />
-              <Text style={styles.incomeAmountText}>₱300.00</Text>
+              <Text style={styles.incomeAmountText}>₱5000.00</Text>
             </View>
           </View>
 
           <View style={styles.expensesAmount}>
             <View style={styles.row}>
               <FontAwesome name="caret-down" size={30} color="red" style={styles.icon} />
-              <Text style={styles.expensesAmountText}>₱300.00</Text>
+              <Text style={styles.expensesAmountText}>₱1483.00</Text>
             </View>
           </View>
         </View>
 
- 
-          <View style={styles.searchbar}>
-              <TextInput
-                placeholder="Search here"
-                placeholderTextColor="white"
-                style={styles.homesearchtext}
-              />
-              <FontAwesome name="search" style={styles.searchIcon} />
-          </View>
+        <View style={styles.whiteBox}>
+          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            <View style={styles.category}>
+              {categories.map((cat, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.allCat,
+                    selectedCategory === cat && { backgroundColor: '#4680F3' },
+                  ]}
+                  onPress={() => setSelectedCategory(cat)}
+                >
+                  <Text
+                    style={[
+                      styles.catText,
+                      { color: selectedCategory === cat ? '#fff' : '#000' },
+                    ]}
+                  >
+                    {cat}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
 
-          <View style={styles.whiteBox}>
-              <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.category}>
-                      <View style={styles.allCat}>
-                        <TouchableOpacity>
-                            <Text>All</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.allCat}>
-                        <TouchableOpacity>
-                            <Text>Income</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.allCat}>
-                        <TouchableOpacity>
-                            <Text>Expenses</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-              </ScrollView>
-          </View>
-    </View>
+            {transactions.map((transaction, index) => (
+              <View key={index}>
+                {index === 0 || transactions[index].date !== transactions[index - 1].date ? (
+                  <Text style={styles.transactionDate}>{transaction.date}</Text>
+                ) : null}
+
+                <TransactionItem
+                  time={transaction.time}
+                  title={transaction.title}
+                  category={transaction.category}
+                  amount={transaction.amount}
+                  iconColor={transaction.iconColor}
+                  iconName={transaction.iconName as "caret-up" | "caret-down"}
+                />
+              </View>
+            ))}
+
+          </ScrollView>
+        </View>
+      </View>
     </ImageBackground>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   page: {
-      flex: 1,
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',  
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    paddingHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 10
   },
   transacText: {
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign:"left",
-    padding: 20
+  },
+  addButton: {
+    backgroundColor: '#2551A3',
+    borderRadius: 20,
+    padding: 10,
   },
   totalBalance: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
@@ -84,7 +181,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', 
     alignItems: 'center',
     paddingHorizontal: 30,
-   
   },
   incomeAmount: {
     backgroundColor: '#fff',
@@ -99,7 +195,6 @@ const styles = StyleSheet.create({
   },
   incomeAmountText: {
     fontSize: 18,
-    fontWeight: "bold",
     color: "green"
   },
   expensesAmount: {
@@ -116,7 +211,6 @@ const styles = StyleSheet.create({
   },
   expensesAmountText: {
     fontSize: 18,
-    fontWeight: "bold",
     color: "red"
   },
   row: {
@@ -127,44 +221,81 @@ const styles = StyleSheet.create({
   icon: {
     paddingHorizontal: 5
   },
-  searchbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#D9D9D9',
-    borderRadius: 25,
-    paddingLeft: 15,
-    marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 20
-  },
-  searchIcon: {
-    fontSize: 15,
-    color: 'white',
-    marginRight: 10,
-  },
-  homesearchtext: {
-    flex: 1,
-    color: 'white',
-    fontSize: 14,
-  },
   whiteBox: {
     backgroundColor: "#fff",
-    borderRadius: 30,
-    height: "80%",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    height: "60%",
     width: "100%",
+    flex: 1,
   },
   category: {
-    flexDirection: 'row',      
-    justifyContent: 'space-between', 
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
+    marginTop: 20,
   },
-  allCat:{
-    backgroundColor: '#fff',
+  allCat: {
+    backgroundColor: '#f0f0f0',
     borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    marginVertical: 10,
-    marginHorizontal: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    elevation: 2, 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  catText: {
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  transactionContainer: {
+    backgroundColor: '#f0f0f0',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 10,
+    marginBottom: 15,
+    borderRadius: 10,
+  },
+  transactionDate: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 15,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  transactionContent: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  transactionTextContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  transactionTime: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 5,
+  },
+  transactionTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginTop: 10,
+  },
+  transactionCategory: {
+    fontSize: 14,
+    color: '#888',
+  },
+  transactionDetails: {
+    flexDirection: 'row',  
+    alignItems: 'center',
+    marginLeft: 20,
+    marginTop: 20
   },
 });

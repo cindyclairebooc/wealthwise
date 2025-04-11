@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, TextInput, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Picker } from '@react-native-picker/picker';
@@ -149,8 +149,8 @@ function Dashboard() {
               <Text style={styles.modalTitle}>Edit Balance</Text>
               <View style={styles.modalInputContainer}>
                 <Text style={styles.modalLabel}>Cash Balance:</Text>
-                <View style={styles.pickerContainer}>
-                  <Picker selectedValue={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod} style={styles.picker}>
+                <View>
+                  <Picker selectedValue={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod}>
                     <Picker.Item label="GCash" value="gcash" />
                     <Picker.Item label="Credit Card" value="credit_card" />
                     <Picker.Item label="Debit Card" value="debit_card" />
@@ -187,8 +187,8 @@ function Dashboard() {
               <Text style={styles.modalTitle}>Add Balance</Text>
               <View style={styles.modalInputContainer}>
                 <Text style={styles.modalLabel}>Cash Balance:</Text>
-                <View style={styles.pickerContainer}>
-                  <Picker selectedValue={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod} style={styles.picker}>
+                <View>
+                  <Picker selectedValue={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod}>
                     <Picker.Item label="GCash" value="gcash" />
                     <Picker.Item label="Credit Card" value="credit_card" />
                     <Picker.Item label="PayMaya" value="paymaya" />

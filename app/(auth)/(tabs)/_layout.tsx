@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Text } from 'react-native';
-import { CustomHeader } from './header';
+import CustomHeader from '@/components/header';
 import Icon from 'react-native-vector-icons/Feather';
 
 export default function AuthLayout() {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text,TouchableOpacity, Modal,TextInput,StyleSheet, FlatList,} from 'react-native';
+import {View, Text,TouchableOpacity, Modal,TextInput,StyleSheet, FlatList, ImageBackground} from 'react-native';
 
 const ProfileScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -40,6 +40,7 @@ const ProfileScreen = () => {
   };
 
   return (
+    <ImageBackground source={require("../../../assets/images/cover.png")} style={{ flex: 1 }}>
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.avatar}>
@@ -101,13 +102,13 @@ const ProfileScreen = () => {
         </View>
       </Modal>
     </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E3F2FD',
     padding: 16,
   },
   header: {
@@ -129,10 +130,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 12,
+    color: "#fff"
   },
   phone: {
-    color: '#666',
     fontSize: 14,
+    color: "#fff"
   },
   menuItem: {
     backgroundColor: '#fff',

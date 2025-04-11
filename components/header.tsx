@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import { router } from "expo-router";
 import Icon from 'react-native-vector-icons/Feather';
 
-export function CustomHeader() {
+export default function CustomHeader() {
   return (
     <View style={styles.homeheader}>
       {/* Left section: Profile and greeting */}

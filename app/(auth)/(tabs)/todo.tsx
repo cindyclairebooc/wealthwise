@@ -9,10 +9,10 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  ImageBackground
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 interface Reminder {
@@ -112,6 +112,7 @@ const Reminders: React.FC = () => {
   );
 
   return (
+    <ImageBackground source={require("../../../assets/images/cover.png")} style={{ flex: 1 }}>
     <TouchableWithoutFeedback onPress={() => setMenuVisibleIndex(null)}>
       <View style={styles.container}>
         <View style={styles.card}>
@@ -188,12 +189,12 @@ const Reminders: React.FC = () => {
         </Modal>
       </View>
     </TouchableWithoutFeedback>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E3F2FD',
     flex: 1,
     padding: 16,
     zIndex: 0,
