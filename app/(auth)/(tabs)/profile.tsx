@@ -46,7 +46,7 @@ const ProfileScreen = () => {
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>👤</Text>
         </View>
-        <Text style={styles.name}>User Name</Text>
+        <Text style={styles.name}>Katelyn Smith</Text>
         <Text style={styles.phone}>+63912345678901</Text>
       </View>
 
