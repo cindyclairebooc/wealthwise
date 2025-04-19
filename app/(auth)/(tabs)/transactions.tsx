@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, ImageBackground, Modal, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import React, { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/Feather';
+import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface TransactionItemProps {
   time: string;
@@ -73,12 +75,22 @@ export default function Transactions() {
     },  
   ];
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newAmount, setNewAmount] = useState('');
+  const [newCategory, setNewCategory] = useState('');
+  const [newType, setNewType] = useState('');
+  const [newAccount, setNewAccount] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [newDueDate, setNewDueDate] = useState('');
+  const [newDescription, setNewDescription] = useState('');
+
+
   return (
     <ImageBackground source={require("../../../assets/images/cover.png")} style={{ flex: 1 }}>
       <View style={styles.page}>
         <View style={styles.header}>
             <Text style={styles.transacText}>Transactions</Text>
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
               <Icon name="plus" size={20} color="white" />
             </TouchableOpacity>
       </View>
@@ -141,6 +153,112 @@ export default function Transactions() {
               </View>
             ))}
 
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+              >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                  <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                      <Text style={styles.modalTitle}>New Record</Text>
+                          <TextInput
+                            style={styles.input}
+                            placeholder="Amount"
+                            value={newAmount}
+                            onChangeText={setNewAmount}
+                          />
+
+                          <View style={styles.dropdowninput}>
+                              <Picker
+                                selectedValue={newCategory}
+                                onValueChange={(itemValue) => setNewCategory(itemValue)}
+                                dropdownIconColor="#333"
+                              >
+                                <Picker.Item label="Category" value="" style={{ fontSize: 14 }} />
+                                <Picker.Item label="Food" value="food" style={{ fontSize: 14 }} />
+                                <Picker.Item label="Rent" value="rent" style={{ fontSize: 14 }} />
+                                <Picker.Item label="Utilities" value="utilities" style={{ fontSize: 14 }} />
+                                <Picker.Item label="Others" value="others" style={{ fontSize: 14 }} />
+                              </Picker>
+                          </View>
+
+                          <View style={styles.transacaccount}>
+                              <View style={styles.pickerWrapper}>
+                                <Picker
+                                  selectedValue={newType}
+                                  onValueChange={(itemValue) => setNewType(itemValue)}
+                                  dropdownIconColor="#333"
+                                  style={styles.picker}
+                                >
+                                  <Picker.Item label="Type" value="" style={{ fontSize: 14 }} />
+                                  <Picker.Item label="Expense" value="expense" style={{ fontSize: 14 }} />
+                                  <Picker.Item label="Income" value="income" style={{ fontSize: 14 }} />
+                                </Picker>
+                              </View>
+
+                              <View style={styles.pickerWrapper}>
+                                <Picker
+                                  selectedValue={newAccount}
+                                  onValueChange={(itemValue) => setNewAccount(itemValue)}
+                                  dropdownIconColor="#333"
+                                  style={styles.picker}
+                                >
+                                  <Picker.Item label="Account" value="" style={{ fontSize: 14 }} />
+                                  <Picker.Item label="Cash" value="cash" style={{ fontSize: 14 }} />
+                                  <Picker.Item label="Credit" value="credit" style={{ fontSize: 14 }} />
+                                </Picker>
+                              </View>
+                            </View>
+
+                          {showDatePicker && (
+                              <DateTimePicker
+                                value={new Date()}
+                                mode="date"
+                                display="default"
+                                onChange={(event, selectedDate) => {
+                                  setShowDatePicker(false);
+                                  if (selectedDate) {
+                                    setNewDueDate(selectedDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+                                  }
+                                }}
+                              />
+                            )}
+
+                            <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
+                              <Text>{newDueDate || 'Date'}</Text>
+                            </TouchableOpacity>
+
+                          <TextInput
+                            style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+                            placeholder="Description"
+                            value={newDescription}
+                            onChangeText={setNewDescription}
+                            multiline={true}
+                            numberOfLines={4}
+                          />
+                      
+                      <View style={styles.modalButtons}>
+                        <TouchableOpacity
+                          style={[styles.button, { backgroundColor: '#2196F3' }]}
+                          onPress={() => {
+                            setModalVisible(false);
+                          }}
+                        >
+                          <Text style={styles.buttonText}>Save</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.button, { backgroundColor: '#B0BEC5' }]}
+                          onPress={() => setModalVisible(false)}
+                        >
+                          <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </Modal>
           </ScrollView>
         </View>
       </View>
@@ -297,5 +415,73 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 20,
     marginTop: 20
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  transacaccount: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  pickerWrapper: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    marginBottom: 12
+  },
+  picker: {
+    width: '105%',
+  },
+  transacaccountinput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 12,
+    width: '45%'
+  },
+  dropdowninput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 12,
   },
 });
